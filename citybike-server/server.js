@@ -3,6 +3,7 @@ var cors = require('cors')
 const http = require("http");
 const socketIo = require("socket.io");
 const cityBikesConstants = require('./constants/cityBikes.constants');
+const ioEventsConstants = require('./constants/ioevents.constants');
 const bikesInfoManagerClass = require('./managers/bikesInfo.manager');
 const bikesInfoManager = new bikesInfoManagerClass()
 const cityBikesClient = require('./clients/citybikes/client');
@@ -35,9 +36,15 @@ setInterval(() => {
         bikesInfoManager.setBikesData(netData.network.stations);
       }
       bikesInfoManager.setLocationInfo(netData.network.location);
-      io.emit('bikes:update', { stations: netData.network.stations, storedDates: bikesInfoManager.getStoredDates(), totalEmptySlots, totalFreeBikes });
-    }).catch(() => console.log('Cannot get CityBikes Network Info'))
+      io.emit(ioEventsConstants.events.BIKES_UPDATE_DATA, { stations: netData.network.stations, currLocation: netData.network.location, storedDates: bikesInfoManager.getStoredDates(), totalEmptySlots, totalFreeBikes });
+    }).catch(() => {
+      io.emit(ioEventsConstants.events.BIKES_UPDATE_DATA_ERROR, {
+        message: ioEventsConstants.errors.NETWORK_INFO_ERROR
+      })
+    })
 }, interval);
+
+io.emit('server:init', {})
 
 io.on("connection", socket => {
   var socketId = socket.id;
