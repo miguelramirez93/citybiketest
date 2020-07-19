@@ -23,7 +23,7 @@ The server
 
 This is the node socket.io Server app to start :
 
-`node server.js`
+`CITY_BIKES_API_URI=http://api.citybik.es node server.js`
 
 Then run the client app
 

@@ -43,7 +43,6 @@ class App extends Component {
       if (this.state.live) {
         const updatedState = { ...this.state }
         updatedState.markers = stationMaper.stationListToStationMarkerList(data.stations)
-        console.log('[DATA]', data);
         updatedState.totalEmptySlots = data.totalEmptySlots
         updatedState.totalFreeBikes = data.totalFreeBikes
         updatedState.updateDates = stationMaper.stationUpdateDateToSelectField(data.storedDates)
@@ -69,7 +68,6 @@ class App extends Component {
   }
 
   render() {
-    const { response } = this.state;
     const position = [this.state.lat, this.state.lng]
 
 
@@ -77,14 +75,15 @@ class App extends Component {
 
     return (
 
-      <div >
-        <div class="main-container">
+      <div class="main-container" >
           <div>
             <h3>Total Empty Slots: </h3>
             <p>{this.state.totalEmptySlots}</p>
+            <h3>Total Free Bikes: </h3>
+            <p>{this.state.totalFreeBikes}</p>
+            <h3>Mode:</h3>
             <Select options={this.state.updateDates} onChange={this.onSelectHistoryChangeHandler} />
           </div>
-        </div>
         <div class="map-container">
         <div className="map">
           <h1> City Bikes in {this.state.city} </h1>
